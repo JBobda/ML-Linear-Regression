@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 #Linear Regression machine learning algorithm using Gradient Descent
 
@@ -52,14 +53,37 @@ def gradientDescentRunner(data, startB, startM, learningRate, iterations):
 def main():
     #Load the Student data into an array using numpy
     data = np.genfromtxt("data.csv", delimiter=",")
+
+    #Load the data points into seperate lists for plotting later
+    xValues = []
+    yValues = []
+    for i in range(0, len(data)):
+        xValues.append(data[i, 0])
+        yValues.append(data[i, 1])
+    
     #Hyperparameters that manipulate the machine learning model
     learningRate = 0.0001
     iterations = 1000
     #Initial values for the Line y = mx + b, slope formula
     initialB = 0
     initialM = 0
+    #Calling the gradient descent runner function and storing its returns
     [b, m] = gradientDescentRunner(data, initialB, initialM, learningRate, iterations)
-    print("The line of best fit is y = " + str(m) + "x + " + str(b))
+    error = str(calculateError(b, m, data))
+    print("The line of best fit is y = " + str(m) + "x + " + str(b) + " with an error of " + error)
+
+    #Using Matlplotlib to draw the data, and the points to the screen
+    # Create a list of values in the best fit line
+    bestFitLine = [m * i + b for i in xValues]
+
+    #Draw the data points from the .csv file
+    plt.plot(xValues, yValues, "o")
+    #Draw the best fit line
+    plt.plot(xValues, bestFitLine)
+    #Graph specifications
+    plt.ylabel("Test Score received")
+    plt.xlabel("Time Spent Studying (Hours)")
+    plt.show()
 
 if __name__ == "__main__":
     main()
